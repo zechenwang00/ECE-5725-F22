@@ -8,6 +8,7 @@ PIR_1 = 17
 PIR_2 = 22
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(PIR_1, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+GPIO.setup(PIR_2, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
 # callbacks
 def motion_1(channel):
