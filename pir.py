@@ -11,7 +11,7 @@ GPIO.setup(PIR_1, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 # callbacks
 def motion(channel):
 	message = 'motion detected'
-	curr_time = datetime.datetime.now().strftime("%H:%M:%S %d/%m/%Y")
+	curr_time = datetime.datetime.now().strftime("%H:%M:%S %m/%d/%Y")
 	# resp = requests.post('https://textbelt.com/text', {
 	# 	'phone': config.PHONE,
 	# 	'message': message + " at " + curr_time,
