@@ -39,4 +39,5 @@ for i in range (len(y1_hp)):
 # plt.plot(y1, linestyle = 'dotted', label='original')
 plt.plot(y1_hp, linestyle = 'dotted', label='highpass')
 # plt.plot(y2, linestyle = 'dotted')
+plt.legend()
 plt.show()
