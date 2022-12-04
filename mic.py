@@ -11,20 +11,10 @@ duration = 2  # seconds
 rec_start_time = None
 rec_finish_time = None
 
-def init():
-	global rec_start_time, rec_finish_time
-
-	rec_start_time = time.time()
-	rec_finish_time = rec_start_time + 2.1
-	myrecording = sd.rec(duration * fs, samplerate=fs, channels=2, blocking=False)
-
 def record(visualize):
-	global rec_start_time, rec_finish_time
-
-	if time.time() > rec_finish_time:
-		rec_start_time = time.time()
-		rec_finish_time = rec_start_time + 2.1
-		myrecording = sd.rec(duration * fs, samplerate=fs, channels=2, blocking=False)
+	# keeps recording audio and then perform FFT
+	while True:
+		myrecording = sd.rec(duration * fs, samplerate=fs, channels=2, blocking=True)
 
 		# collect output
 		y1 = abs(myrecording[:,0])

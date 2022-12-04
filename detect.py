@@ -66,67 +66,67 @@ def init():
 def start(visualize, save=False):
     # detect apriltags and uptate servo positions to track each tag
     global curr_angle_vert, curr_angle_hori
-    try:
-        # read from camera
-        ret, frame = cam.read()
-        if not ret:
-            sys.exit('cannot read from camera')
+    while True
+        try:
+            # read from camera
+            ret, frame = cam.read()
+            if not ret:
+                sys.exit('cannot read from camera')
 
-        # detect on grayscale
-        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-        gray = cv2.resize(gray, (640, 360))
-        gray = cv2.rotate(gray, cv2.ROTATE_90_COUNTERCLOCKWISE)
-        if save:
-            cv2.imwrite("sound.jpg", gray)
-        if visualize:
-            cv2.imshow('frame', gray)
+            # detect on grayscale
+            gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+            gray = cv2.resize(gray, (640, 360))
+            gray = cv2.rotate(gray, cv2.ROTATE_90_COUNTERCLOCKWISE)
+            if save:
+                cv2.imwrite("sound.jpg", gray)
+            if visualize:
+                cv2.imshow('frame', gray)
 
-        detections = at_detector.detect(gray)
-        print('vert:', curr_angle_vert, ' hori:',curr_angle_hori)
-        # format output
-        if len(detections) >= 1:
-            for idx in range(len(detections)):
-                x = round(detections[idx].center[0])
-                y = round(detections[idx].center[1])
+            detections = at_detector.detect(gray)
+            print('vert:', curr_angle_vert, ' hori:',curr_angle_hori)
+            # format output
+            if len(detections) >= 1:
+                for idx in range(len(detections)):
+                    x = round(detections[idx].center[0])
+                    y = round(detections[idx].center[1])
 
-                # vertical
-                if (y < 270):    # too high
-                    curr_angle_vert = max(-25, curr_angle_vert - 2)
-                elif (y > 370):  # too low
-                    curr_angle_vert = min( 25, curr_angle_vert + 2)
-                
-                # horizontal
-                if (x > 230):    # too left
-                    curr_angle_hori = max(-25, curr_angle_hori - 2)
-                elif (x < 130):  # too right
-                    curr_angle_hori = min( 25, curr_angle_hori + 2)                
-                
-                
-                
-                pi.hardware_PWM(VERT, 50, PWM_BASE_VERT + curr_angle_vert * 1000)
-                pi.hardware_PWM(HORI, 50, PWM_BASE_HORI + curr_angle_hori * 1000)
-                
-                # print tag info
-                print("Detected tag id[" + str(detections[idx].tag_id), end='] @ ')
-                print('x = '  + str(x) +
-                    ' y = ' + str(y) )
+                    # vertical
+                    if (y < 270):    # too high
+                        curr_angle_vert = max(-25, curr_angle_vert - 2)
+                    elif (y > 370):  # too low
+                        curr_angle_vert = min( 25, curr_angle_vert + 2)
 
-        if cv2.waitKey(1) == ord('q'):
-            pi.hardware_PWM(VERT, 50, 0)
-            pi.hardware_PWM(HORI, 50, 0)
+                    # horizontal
+                    if (x > 230):    # too left
+                        curr_angle_hori = max(-25, curr_angle_hori - 2)
+                    elif (x < 130):  # too right
+                        curr_angle_hori = min( 25, curr_angle_hori + 2)
+
+
+
+                    pi.hardware_PWM(VERT, 50, PWM_BASE_VERT + curr_angle_vert * 1000)
+                    pi.hardware_PWM(HORI, 50, PWM_BASE_HORI + curr_angle_hori * 1000)
+
+                    # print tag info
+                    print("Detected tag id[" + str(detections[idx].tag_id), end='] @ ')
+                    print('x = '  + str(x) +
+                        ' y = ' + str(y) )
+
+            if cv2.waitKey(1) == ord('q'):
+                pi.hardware_PWM(VERT, 50, 0)
+                pi.hardware_PWM(HORI, 50, 0)
+                pi.stop()
+                cam.release()
+                cv2.destroyAllWindows()
+                sys.exit()
+
+        except KeyboardInterrupt:
+            pi.hardware_PWM(VERT,50,0)
+            pi.hardware_PWM(HORI,50,0)
             pi.stop()
             cam.release()
             cv2.destroyAllWindows()
-            sys.exit()
-
-    except KeyboardInterrupt:
-        pi.hardware_PWM(VERT,50,0)
-        pi.hardware_PWM(HORI,50,0)
-        pi.stop()
-        cam.release()
-        cv2.destroyAllWindows()
 
 if __name__ == "__main__":
     init()
-    while True:
-        start(True)
+    start(True)
