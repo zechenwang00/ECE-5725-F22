@@ -5,7 +5,9 @@ import apriltag
 
 import pigpio
 from gpiozero import Servo
+
 import time
+import sys
 
 '''
 ####################
@@ -56,12 +58,13 @@ print("start detecting")
         Main Loop
 ###########################
 '''
-while True:
+def start():
+    global curr_angle_vert, curr_angle_hori
     try:
         # read from camera
         ret, frame = cam.read()
         if not ret:
-            break
+            sys.exit('cannot read from camera')
 
         # detect on grayscale
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
@@ -110,7 +113,7 @@ while True:
                     ' y = ' + str(y) )
 
         if cv2.waitKey(1) == ord('q'):
-            break
+            sys.exit()
 
     except KeyboardInterrupt:
         pi.hardware_PWM(VERT,50,0)
