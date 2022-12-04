@@ -113,6 +113,11 @@ def start():
                     ' y = ' + str(y) )
 
         if cv2.waitKey(1) == ord('q'):
+            pi.hardware_PWM(VERT, 50, 0)
+            pi.hardware_PWM(HORI, 50, 0)
+            pi.stop()
+            cam.release()
+            cv2.destroyAllWindows()
             sys.exit()
 
     except KeyboardInterrupt:
