@@ -58,6 +58,10 @@ print("start detecting")
         Main Loop
 ###########################
 '''
+def init():
+    pi.hardware_PWM(VERT, 50, PWM_BASE_VERT + curr_angle_vert * 1000)
+    pi.hardware_PWM(HORI, 50, PWM_BASE_HORI + curr_angle_hori * 1000)
+
 def start():
     global curr_angle_vert, curr_angle_hori
     try:
