@@ -1,3 +1,5 @@
+import threading
+
 import sounddevice as sd
 import matplotlib.pyplot as plt
 import numpy as np
@@ -14,6 +16,8 @@ rec_finish_time = None
 def record(visualize):
 	# keeps recording audio and then perform FFT
 	while True:
+		if threading.Event.is_set():
+			break
 		myrecording = sd.rec(duration * fs, samplerate=fs, channels=2, blocking=True)
 
 		# collect output
@@ -50,6 +54,5 @@ def record(visualize):
 			plt.show()
 
 if __name__ == "__main__":
-	init()
 	while True:
 		record(True)
