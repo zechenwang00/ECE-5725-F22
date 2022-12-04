@@ -18,7 +18,9 @@ def record(stop_event, visualize):
 	while True:
 		if stop_event.is_set():
 			break
-		myrecording = sd.rec(duration * fs, samplerate=fs, channels=2, blocking=True)
+		myrecording = sd.rec(duration * fs, samplerate=fs, channels=2, blocking=False)
+		time.sleep(2)
+		sd.wait()
 
 		# collect output
 		y1 = abs(myrecording[:,0])
