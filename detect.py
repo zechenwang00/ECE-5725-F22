@@ -63,7 +63,7 @@ def init():
     pi.hardware_PWM(VERT, 50, PWM_BASE_VERT + curr_angle_vert * 1000)
     pi.hardware_PWM(HORI, 50, PWM_BASE_HORI + curr_angle_hori * 1000)
 
-def start(visualize):
+def start(visualize, save=False):
     # detect apriltags and uptate servo positions to track each tag
     global curr_angle_vert, curr_angle_hori
     try:
@@ -76,6 +76,8 @@ def start(visualize):
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         gray = cv2.resize(gray, (640, 360))
         gray = cv2.rotate(gray, cv2.ROTATE_90_COUNTERCLOCKWISE)
+        if save:
+            cv2.imwrite("sound.jpg", gray)
         if visualize:
             cv2.imshow('frame', gray)
 
@@ -126,4 +128,5 @@ def start(visualize):
 
 if __name__ == "__main__":
     init()
-    start(True)
+    while True:
+        start(True)

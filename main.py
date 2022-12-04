@@ -1,4 +1,5 @@
 import detect
+import mic
 
 import argparse
 
@@ -20,9 +21,9 @@ args = parser.parse_args()
      Main Loop
 ####################
 '''
+mic.init()
+detect.init()
+
 while True:
-    detect.init()
-    if args.visualize:
-        detect.start(True)
-    else:
-        detect.start(False)
+    detect.start(visualize=args.visualize)
+    mic.record(visualize=args.visualize)
