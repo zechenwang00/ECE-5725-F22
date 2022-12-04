@@ -66,7 +66,7 @@ def init():
 def start(visualize, save=False):
     # detect apriltags and uptate servo positions to track each tag
     global curr_angle_vert, curr_angle_hori
-    while True
+    while True:
         try:
             # read from camera
             ret, frame = cam.read()
