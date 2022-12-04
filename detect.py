@@ -59,10 +59,12 @@ print("start detecting")
 ###########################
 '''
 def init():
+    # restet two servos to initial positions
     pi.hardware_PWM(VERT, 50, PWM_BASE_VERT + curr_angle_vert * 1000)
     pi.hardware_PWM(HORI, 50, PWM_BASE_HORI + curr_angle_hori * 1000)
 
-def start():
+def start(visualize):
+    # detect apriltags and uptate servo positions to track each tag
     global curr_angle_vert, curr_angle_hori
     try:
         # read from camera
@@ -74,7 +76,8 @@ def start():
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         gray = cv2.resize(gray, (640, 360))
         gray = cv2.rotate(gray, cv2.ROTATE_90_COUNTERCLOCKWISE)
-        cv2.imshow('frame', gray)
+        if visualize:
+            cv2.imshow('frame', gray)
 
         detections = at_detector.detect(gray)
         print('vert:', curr_angle_vert, ' hori:',curr_angle_hori)
@@ -100,16 +103,6 @@ def start():
                 
                 pi.hardware_PWM(VERT, 50, PWM_BASE_VERT + curr_angle_vert * 1000)
                 pi.hardware_PWM(HORI, 50, PWM_BASE_HORI + curr_angle_hori * 1000)
-
-
-                # # update servo positions
-                # if curr_angle_vert != prev_angle_vert:
-                #     servo_vert.value = curr_angle_vert
-                #     prev_angle_vert = curr_angle_vert
-
-                # if curr_angle_hori != prev_angle_hori:
-                #     servo_hori.value = curr_angle_hori
-                #     prev_angle_hori = curr_angle_hori
                 
                 # print tag info
                 print("Detected tag id[" + str(detections[idx].tag_id), end='] @ ')
@@ -133,4 +126,4 @@ def start():
 
 if __name__ == "__main__":
     init()
-    start()
+    start(True)
