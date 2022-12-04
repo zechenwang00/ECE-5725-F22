@@ -9,7 +9,7 @@ import time
 
 # set duration and start recording
 fs = 44100
-duration = 2  # seconds
+duration = 1  # seconds
 
 
 def record(stop_event, visualize):
@@ -19,7 +19,7 @@ def record(stop_event, visualize):
 			break
 
 		rec_start_time = time.time()
-		rec_stop_time = rec_start_time + 2.1
+		rec_stop_time = rec_start_time + 1.1
 		myrecording = sd.rec(duration * fs, samplerate=fs, channels=2, blocking=False)
 
 		while time.time() < rec_stop_time:
