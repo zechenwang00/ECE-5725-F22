@@ -56,8 +56,7 @@ def record(stop_event, visualize):
 			plt.plot(y1_hp, linestyle = 'dotted', label='highpass')
 			# plt.plot(y2, linestyle = 'dotted')
 			plt.legend()
-			plt.draw()
-			plt.pause(0.01)
+			plt.show(block=False)
 
 if __name__ == "__main__":
 	while True:

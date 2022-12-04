@@ -25,21 +25,22 @@ args = parser.parse_args()
 ####################
 '''
 
-detect.init()
-# detect.start(visualize=args.visualize)
-# mic.record(visualize=args.visualize)
+if __name__ == "__main__":
+    detect.init()
+    # detect.start(visualize=args.visualize)
+    # mic.record(visualize=args.visualize)
 
-stop_event = threading.Event()
-thread_detect = threading.Thread(target=detect.start, args=(stop_event, args.visualize,))
-thread_mic = threading.Thread(target=mic.record, args=(stop_event, args.visualize,))
-thread_detect.start()
-thread_mic.start()
+    stop_event = threading.Event()
+    thread_detect = threading.Thread(target=detect.start, args=(stop_event, args.visualize,))
+    thread_mic = threading.Thread(target=mic.record, args=(stop_event, args.visualize,))
+    thread_detect.start()
+    thread_mic.start()
 
-while True:
-    try:
-        pass
-    except KeyboardInterrupt:
-        stop_event.set()
-        thread_detect.join()
-        thread_mic.join()
-        break
+    while True:
+        try:
+            pass
+        except KeyboardInterrupt:
+            stop_event.set()
+            thread_detect.join()
+            thread_mic.join()
+            break
