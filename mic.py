@@ -13,10 +13,10 @@ duration = 2  # seconds
 rec_start_time = None
 rec_finish_time = None
 
-def record(visualize):
+def record(stop_event, visualize):
 	# keeps recording audio and then perform FFT
 	while True:
-		if threading.Event.is_set():
+		if stop_event.is_set():
 			break
 		myrecording = sd.rec(duration * fs, samplerate=fs, channels=2, blocking=True)
 

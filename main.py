@@ -29,9 +29,9 @@ detect.init()
 # detect.start(visualize=args.visualize)
 # mic.record(visualize=args.visualize)
 
-
-thread_detect = threading.Thread(target=detect.start, args=(args.visualize,))
-thread_mic = threading.Thread(target=mic.record, args=(args.visualize,))
+stop_event = threading.Event()
+thread_detect = threading.Thread(target=detect.start, args=(stop_event, args.visualize,))
+thread_mic = threading.Thread(target=mic.record, args=(stop_event, args.visualize,))
 thread_detect.start()
 thread_mic.start()
 
@@ -39,7 +39,7 @@ while True:
     try:
         pass
     except KeyboardInterrupt:
-        threading.Event.set()
+        stop_event.set()
         thread_detect.join()
         thread_mic.join()
         break
