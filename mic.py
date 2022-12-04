@@ -10,17 +10,20 @@ import time
 # set duration and start recording
 fs = 44100
 duration = 2  # seconds
-rec_start_time = None
-rec_finish_time = None
+
 
 def record(stop_event, visualize):
 	# keeps recording audio and then perform FFT
 	while True:
 		if stop_event.is_set():
 			break
+
+		rec_start_time = time.time()
+		rec_stop_time = rec_start_time + 2.1
 		myrecording = sd.rec(duration * fs, samplerate=fs, channels=2, blocking=False)
-		time.sleep(2)
-		sd.wait()
+
+		while time.time() < rec_stop_time:
+			time.sleep(0)
 
 		# collect output
 		y1 = abs(myrecording[:,0])
