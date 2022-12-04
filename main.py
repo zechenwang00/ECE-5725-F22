@@ -30,7 +30,7 @@ detect.init()
 # mic.record(visualize=args.visualize)
 
 
-thread_test = threading.Thread(target=detect.start(), args=(args.visualize,))
+thread_test = threading.Thread(target=detect.start, args=(args.visualize,))
 thread_mic = threading.Thread(target=mic.record, args=(args.visualize,))
 thread_test.start()
 thread_mic.start()
