@@ -130,3 +130,7 @@ def start():
         pi.stop()
         cam.release()
         cv2.destroyAllWindows()
+
+if __name__ == "__main__":
+    init()
+    start()
