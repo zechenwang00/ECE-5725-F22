@@ -1,4 +1,5 @@
 import threading
+import argparse
 
 import sounddevice as sd
 import matplotlib.pyplot as plt
@@ -61,5 +62,16 @@ def record(event_dict, args):
 			plt.show()
 
 if __name__ == "__main__":
+	parser = argparse.ArgumentParser(
+						prog = 'Baby Monitor',
+						description = '')
+	parser.add_argument('--vis', dest='visualize',
+						action='store_true')
+	parser.add_argument('--fig', dest='figure',
+						action='store_true')
+	parser.add_argument('--verbose', dest='verbose',
+						action='store_true')
+	args = parser.parse_args()
+
 	while True:
-		record(True)
+		record({'stop': threading.Event(), 'capture':threading.Event()}, args)

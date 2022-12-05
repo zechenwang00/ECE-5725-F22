@@ -111,15 +111,15 @@ def gen(camera):
 
                 # vertical
                 if (y < 270):    # too high
-                    curr_angle_vert = max(-25, curr_angle_vert - 2)
+                    curr_angle_vert = max(-25, curr_angle_vert - 1)
                 elif (y > 370):  # too low
-                    curr_angle_vert = min( 25, curr_angle_vert + 2)
+                    curr_angle_vert = min( 25, curr_angle_vert + 1)
 
                 # horizontal
                 if (x > 230):    # too left
-                    curr_angle_hori = max(-25, curr_angle_hori - 2)
+                    curr_angle_hori = max(-25, curr_angle_hori - 1)
                 elif (x < 130):  # too right
-                    curr_angle_hori = min( 25, curr_angle_hori + 2)
+                    curr_angle_hori = min( 25, curr_angle_hori + 1)
 
 
 

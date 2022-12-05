@@ -1,5 +1,5 @@
 import detect
-import detect_w_stream
+# import detect_w_stream
 import time
 
 import mic
@@ -31,28 +31,29 @@ args = parser.parse_args()
 '''
 
 if __name__ == "__main__":
-    detect.init()
+    # detect.init()
     # detect.start(visualize=args.visualize)
-    # mic.record(visualize=args.visualize)
+    # mic.record(visualize=args.visualize)\
+    detect_w_stream.init()
 
     stop_event = threading.Event()
     capture_event = threading.Event()
     event_dict = {'stop': stop_event, 'capture': capture_event}
 
-    # thread_detect = threading.Thread(target=detect.start, args=(event_dict, args,))
+    thread_detect = threading.Thread(target=detect.start, args=(event_dict, args,))
     thread_mic = threading.Thread(target=mic.record, args=(event_dict, args,))
-    thread_stream = threading.Thread(target=detect_w_stream.app.run(), kwargs={'host': '0.0.0.0','debug': False})
+    # thread_stream = threading.Thread(target=detect_w_stream.app.run(), kwargs={'host': '0.0.0.0','debug': False})
 
-    # thread_detect.start()
+    thread_detect.start()
     thread_mic.start()
-    thread_stream.start()
+    # thread_stream.start()
 
     while True:
         try:
             pass
         except KeyboardInterrupt:
             stop_event.set()
-            thread_stream.join()
-            # thread_detect.join()
+            #thread_stream.join()
+            hread_detect.join()
             thread_mic.join()
             break
