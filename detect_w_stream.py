@@ -151,14 +151,17 @@ def gen(camera):
         #    cv2.destroyAllWindows()
         #    break
 
-        with open('capture.tmp', 'rb') as f:
-            capture = pickle.load(f)
-        if capture:
-            print('capturing')
-            cv2.imwrite("sound.jpg", frame)
-            capture = False
-            with open('capture.tmp', 'wb') as f:
-                pickle.dump(capture, f)
+        try:
+            with open('capture.tmp', 'rb') as f:
+                capture = pickle.load(f)
+            if capture:
+                print('capturing')
+                cv2.imwrite("sound.jpg", frame)
+                capture = False
+                with open('capture.tmp', 'wb') as f:
+                    pickle.dump(capture, f)
+        except:
+            pass
 
         _ , jpeg = cv2.imencode(".jpg", frame)
         jpeg = jpeg.tobytes()
