@@ -19,11 +19,12 @@ def record(stop_event, args):
 			break
 
 		rec_start_time = time.time()
-		rec_stop_time = rec_start_time + 1.1
+		rec_stop_time = rec_start_time + 0.9
 		myrecording = sd.rec(duration * fs, samplerate=fs, channels=2, blocking=False)
 
 		while time.time() < rec_stop_time:
 			time.sleep(0)
+		sd.wait()
 
 		# collect output
 		y1 = abs(myrecording[:,0])
