@@ -64,7 +64,7 @@ def init():
     pi.hardware_PWM(VERT, 50, PWM_BASE_VERT + curr_angle_vert * 1000)
     pi.hardware_PWM(HORI, 50, PWM_BASE_HORI + curr_angle_hori * 1000)
 
-def start(stop_event, args):
+def start(event_dict, args):
     # detect apriltags and uptate servo positions to track each tag
     global curr_angle_vert, curr_angle_hori
 
@@ -78,13 +78,17 @@ def start(stop_event, args):
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         gray = cv2.resize(gray, (640, 360))
         gray = cv2.rotate(gray, cv2.ROTATE_90_COUNTERCLOCKWISE)
-        # if save:
-        #     cv2.imwrite("sound.jpg", gray)
+
+        if event_dict['capture'].is_set():
+            cv2.imwrite("sound.jpg", gray)
+            print('writing image...')
+            event_dict['capture'].clear()
+
         if args.visualize:
             cv2.imshow('frame', gray)
 
         detections = at_detector.detect(gray)
-        print('vert:', curr_angle_vert, ' hori:',curr_angle_hori)
+
         # format output
         if len(detections) >= 1:
             for idx in range(len(detections)):
@@ -109,9 +113,11 @@ def start(stop_event, args):
                 pi.hardware_PWM(HORI, 50, PWM_BASE_HORI + curr_angle_hori * 1000)
 
                 # print tag info
-                print("Detected tag id[" + str(detections[idx].tag_id), end='] @ ')
-                print('x = '  + str(x) +
-                    ' y = ' + str(y) )
+                if args.verbose:
+                    print('vert:', curr_angle_vert, ' hori:', curr_angle_hori)
+                    print("Detected tag id[" + str(detections[idx].tag_id), end='] @ ')
+                    print('x = '  + str(x) +
+                        ' y = ' + str(y) )
 
         if cv2.waitKey(1) == ord('q'):
             pi.hardware_PWM(VERT, 50, 0)
@@ -121,7 +127,7 @@ def start(stop_event, args):
             cv2.destroyAllWindows()
             sys.exit()
 
-        if stop_event.is_set():
+        if event_dict['stop'].is_set():
             pi.hardware_PWM(VERT,50,0)
             pi.hardware_PWM(HORI,50,0)
             pi.stop()
@@ -132,4 +138,4 @@ def start(stop_event, args):
 
 if __name__ == "__main__":
     init()
-    start(True, args,)
+    start(True)
