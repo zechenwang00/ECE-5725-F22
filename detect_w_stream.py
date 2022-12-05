@@ -6,6 +6,7 @@
 from flask import Flask, render_template, Response, request, send_from_directory
 from camera import VideoCamera
 import os
+import pickle
 
 from pupil_apriltags import Detector
 import cv2
@@ -85,7 +86,6 @@ def gen(camera):
     #get camera frame
     # detect apriltags and uptate servo positions to track each tag
     global curr_angle_vert, curr_angle_hori
-    fifo = os.open('mic2cam', os.O_NONBLOCK | os.O_WRONLY)
 
     while True:
         frame = camera.get_frame()
@@ -151,8 +151,14 @@ def gen(camera):
         #    cv2.destroyAllWindows()
         #    break
 
-        line = os.read(fifo,1)
-        print(line)
+        with open('capture.tmp', 'rb') as f:
+            capture = pickle.load(f)
+        if capture:
+            print('capturing')
+            cv2.imwrite("sound.jpg", frame)
+            capture = False
+            with open('capture.tmp', 'wb') as f:
+                pickle.dump(capture, f)
 
         _ , jpeg = cv2.imencode(".jpg", frame)
         jpeg = jpeg.tobytes()

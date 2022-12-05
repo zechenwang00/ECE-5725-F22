@@ -1,6 +1,7 @@
 import threading
 import argparse
 import os,sys
+import pickle
 
 import sounddevice as sd
 import matplotlib.pyplot as plt
@@ -52,8 +53,9 @@ def record(event_dict, args):
 			if (counter > 2):
 				print("detected")
 				event_dict['capture'].set()
-				with open('mic2cam','a') as fifo:
-					fifo.write('c')
+				capture = True
+				with open('capture.tmp', 'wb') as f:
+					pickle.dump(capture, f)
 				break
 
 
