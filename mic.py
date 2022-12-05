@@ -52,11 +52,12 @@ def record(stop_event, visualize):
 
 
 		if visualize:
+			plt.clf()
 			# plt.plot(y1, linestyle = 'dotted', label='original')
 			plt.plot(y1_hp, linestyle = 'dotted', label='highpass')
 			# plt.plot(y2, linestyle = 'dotted')
-			plt.legend()
-			plt.show(block=False)
+			plt.draw()
+			plt.pause(0.001)
 
 if __name__ == "__main__":
 	while True:
