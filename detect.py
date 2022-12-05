@@ -88,7 +88,7 @@ def start(event_dict, args):
             cv2.imshow('frame', gray)
 
         detections = at_detector.detect(gray)
-        print('vert:', curr_angle_vert, ' hori:',curr_angle_hori)
+
         # format output
         if len(detections) >= 1:
             for idx in range(len(detections)):
@@ -114,6 +114,7 @@ def start(event_dict, args):
 
                 # print tag info
                 if args.verbose:
+                    print('vert:', curr_angle_vert, ' hori:', curr_angle_hori)
                     print("Detected tag id[" + str(detections[idx].tag_id), end='] @ ')
                     print('x = '  + str(x) +
                         ' y = ' + str(y) )
