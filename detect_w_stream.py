@@ -135,7 +135,7 @@ def gen(camera):
             pi.hardware_PWM(VERT, 50, 0)
             pi.hardware_PWM(HORI, 50, 0)
             pi.stop()
-            cam.release()
+            camera.release()
             cv2.destroyAllWindows()
             sys.exit()
 
