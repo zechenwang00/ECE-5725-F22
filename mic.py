@@ -1,5 +1,6 @@
 import threading
 import argparse
+import os,sys
 
 import sounddevice as sd
 import matplotlib.pyplot as plt
@@ -51,6 +52,8 @@ def record(event_dict, args):
 			if (counter > 2):
 				print("detected")
 				event_dict['capture'].set()
+				with open('mic2cam','a') as fifo:
+					fifo.write('c')
 				break
 
 

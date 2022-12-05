@@ -102,7 +102,7 @@ def gen(camera):
         #    cv2.imshow('frame', gray)
 
         detections = at_detector.detect(frame)
-        print('vert:', curr_angle_vert, ' hori:', curr_angle_hori)
+
         # format output
         if len(detections) >= 1:
             for idx in range(len(detections)):
@@ -127,6 +127,7 @@ def gen(camera):
                 pi.hardware_PWM(HORI, 50, PWM_BASE_HORI + curr_angle_hori * 1000)
 
                 # print tag info
+                print('vert:', curr_angle_vert, ' hori:', curr_angle_hori)
                 print("Detected tag id[" + str(detections[idx].tag_id), end='] @ ')
                 print('x = '  + str(x) +
                     ' y = ' + str(y) )
@@ -139,6 +140,8 @@ def gen(camera):
             cv2.destroyAllWindows()
             sys.exit()
 
+
+
         #if stop_event.is_set():
         #    pi.hardware_PWM(VERT,50,0)
         #    pi.hardware_PWM(HORI,50,0)
@@ -146,6 +149,10 @@ def gen(camera):
         #    cam.release()
         #    cv2.destroyAllWindows()
         #    break
+
+        with open('mic2cam') as fifo:
+            line = fifo.read()
+            print(line)
 
         _ , jpeg = cv2.imencode(".jpg", frame)
         jpeg = jpeg.tobytes()
