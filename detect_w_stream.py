@@ -85,6 +85,7 @@ def gen(camera):
     #get camera frame
     # detect apriltags and uptate servo positions to track each tag
     global curr_angle_vert, curr_angle_hori
+    fifo = os.open('mic2cam', os.O_NONBLOCK | os.O_WRONLY)
 
     while True:
         frame = camera.get_frame()
@@ -150,9 +151,8 @@ def gen(camera):
         #    cv2.destroyAllWindows()
         #    break
 
-        with open('mic2cam') as fifo:
-            line = fifo.read()
-            print(line)
+        line = os.read(fifo,1)
+        print(line)
 
         _ , jpeg = cv2.imencode(".jpg", frame)
         jpeg = jpeg.tobytes()
