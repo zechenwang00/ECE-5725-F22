@@ -1,3 +1,12 @@
+#Modified by smartbuilds.io
+#Date: 27.09.20
+#Desc: This web application serves a motion JPEG stream
+# main.py
+# import the necessary packages
+from flask import Flask, render_template, Response, request, send_from_directory
+from camera import VideoCamera
+import os
+
 from pupil_apriltags import Detector
 import cv2
 import numpy as np
@@ -30,16 +39,17 @@ curr_angle_hori = 0
 PWM_BASE_VERT = 85 * 1000
 PWM_BASE_HORI = 55 * 1000
 
+
 '''
 #############################
     Apriltag & Cam Config
 #############################
 '''
-cam = cv2.VideoCapture(0)
-cam.set(cv2.CAP_PROP_BUFFERSIZE,1)
-if not cam.isOpened():
-    print("cannot access camera 0")
-    exit()
+#cam = cv2.VideoCapture(0)
+#cam.set(cv2.CAP_PROP_BUFFERSIZE,1)
+#if not cam.isOpened():
+#    print("cannot access camera 0")
+#    exit()
 
 at_detector = Detector(
    families="tag36h11",
@@ -53,12 +63,6 @@ at_detector = Detector(
 
 print("start detecting")
 
-
-'''
-###########################
-        Main Loop
-###########################
-'''
 def init():
     # restet two servos to initial positions
     pi.hardware_PWM(VERT, 50, PWM_BASE_VERT + curr_angle_vert * 1000)
@@ -68,23 +72,37 @@ def start(stop_event, args):
     # detect apriltags and uptate servo positions to track each tag
     global curr_angle_vert, curr_angle_hori
 
+pi_camera = VideoCamera(flip=False) # flip pi camera if upside down.
+
+# App Globals (do not edit)
+app = Flask(__name__)
+
+@app.route('/')
+def index():
+    return render_template('index.html') #you can customze index.html here
+
+def gen(camera):
+    #get camera frame
+    # detect apriltags and uptate servo positions to track each tag
+    global curr_angle_vert, curr_angle_hori
+
     while True:
+        frame = camera.get_frame()
         # read from camera
-        ret, frame = cam.read()
-        if not ret:
-            sys.exit('cannot read from camera')
+        #if not ret:
+        #    sys.exit('cannot read from camera')
 
         # detect on grayscale
-        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-        gray = cv2.resize(gray, (640, 360))
-        gray = cv2.rotate(gray, cv2.ROTATE_90_COUNTERCLOCKWISE)
+        #gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        #gray = cv2.resize(gray, (640, 360))
+        #gray = cv2.rotate(gray, cv2.ROTATE_90_COUNTERCLOCKWISE)
         # if save:
         #     cv2.imwrite("sound.jpg", gray)
-        if args.visualize:
-            cv2.imshow('frame', gray)
+        #if args.visualize:
+        #    cv2.imshow('frame', gray)
 
-        detections = at_detector.detect(gray)
-        print('vert:', curr_angle_vert, ' hori:',curr_angle_hori)
+        detections = at_detector.detect(frame)
+        print('vert:', curr_angle_vert, ' hori:', curr_angle_hori)
         # format output
         if len(detections) >= 1:
             for idx in range(len(detections)):
@@ -121,15 +139,31 @@ def start(stop_event, args):
             cv2.destroyAllWindows()
             sys.exit()
 
-        if stop_event.is_set():
-            pi.hardware_PWM(VERT,50,0)
-            pi.hardware_PWM(HORI,50,0)
-            pi.stop()
-            cam.release()
-            cv2.destroyAllWindows()
-            break
+        #if stop_event.is_set():
+        #    pi.hardware_PWM(VERT,50,0)
+        #    pi.hardware_PWM(HORI,50,0)
+        #    pi.stop()
+        #    cam.release()
+        #    cv2.destroyAllWindows()
+        #    break
 
+        _ , jpeg = cv2.imencode(".jpg", frame)
+        jpeg = jpeg.tobytes()
+        
+        yield (b'--frame\r\n'
+               b'Content-Type: image/jpeg\r\n\r\n' + jpeg + b'\r\n\r\n')
 
-if __name__ == "__main__":
-    init()
-    start(True, args,)
+@app.route('/video_feed')
+def video_feed():
+    return Response(gen(pi_camera),
+                    mimetype='multipart/x-mixed-replace; boundary=frame')
+
+# Take a photo when pressing camera button
+@app.route('/picture')
+def take_picture():
+    pi_camera.take_picture()
+    return "None"
+
+if __name__ == '__main__':
+
+    app.run(host='0.0.0.0', debug=False)
