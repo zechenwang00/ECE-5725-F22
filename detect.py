@@ -64,7 +64,7 @@ def init():
     pi.hardware_PWM(VERT, 50, PWM_BASE_VERT + curr_angle_vert * 1000)
     pi.hardware_PWM(HORI, 50, PWM_BASE_HORI + curr_angle_hori * 1000)
 
-def start(stop_event, args):
+def start(event_dict, args):
     # detect apriltags and uptate servo positions to track each tag
     global curr_angle_vert, curr_angle_hori
 
@@ -121,7 +121,7 @@ def start(stop_event, args):
             cv2.destroyAllWindows()
             sys.exit()
 
-        if stop_event.is_set():
+        if event_dict['stop'].is_set():
             pi.hardware_PWM(VERT,50,0)
             pi.hardware_PWM(HORI,50,0)
             pi.stop()

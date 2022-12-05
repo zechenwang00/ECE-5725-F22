@@ -12,10 +12,10 @@ fs = 44100
 duration = 1  # seconds
 
 
-def record(stop_event, args):
+def record(event_dict, args):
 	# keeps recording audio and then perform FFT
 	while True:
-		if stop_event.is_set():
+		if event_dict['stop'].is_set():
 			break
 
 		rec_start_time = time.time()

@@ -33,8 +33,9 @@ if __name__ == "__main__":
     # mic.record(visualize=args.visualize)
 
     stop_event = threading.Event()
-    thread_detect = threading.Thread(target=detect.start, args=(stop_event, args,))
-    thread_mic = threading.Thread(target=mic.record, args=(stop_event, args,))
+    event_dict = {'stop': stop_event}
+    thread_detect = threading.Thread(target=detect.start, args=(event_dict, args,))
+    thread_mic = threading.Thread(target=mic.record, args=(event_dict, args,))
     thread_detect.start()
     thread_mic.start()
 
