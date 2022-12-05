@@ -64,7 +64,7 @@ def init():
     pi.hardware_PWM(VERT, 50, PWM_BASE_VERT + curr_angle_vert * 1000)
     pi.hardware_PWM(HORI, 50, PWM_BASE_HORI + curr_angle_hori * 1000)
 
-def start(stop_event, visualize):
+def start(stop_event, args):
     # detect apriltags and uptate servo positions to track each tag
     global curr_angle_vert, curr_angle_hori
 
@@ -80,7 +80,7 @@ def start(stop_event, visualize):
         gray = cv2.rotate(gray, cv2.ROTATE_90_COUNTERCLOCKWISE)
         # if save:
         #     cv2.imwrite("sound.jpg", gray)
-        if visualize:
+        if args.visualize:
             cv2.imshow('frame', gray)
 
         detections = at_detector.detect(gray)

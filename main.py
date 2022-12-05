@@ -16,6 +16,8 @@ parser = argparse.ArgumentParser(
                     description = '')
 parser.add_argument('--vis', dest='visualize',
                     action='store_true')
+parser.add_argument('--fig', dest='figure',
+                    action='store_true')
 args = parser.parse_args()
 
 
@@ -31,8 +33,8 @@ if __name__ == "__main__":
     # mic.record(visualize=args.visualize)
 
     stop_event = threading.Event()
-    thread_detect = threading.Thread(target=detect.start, args=(stop_event, args.visualize,))
-    thread_mic = threading.Thread(target=mic.record, args=(stop_event, args.visualize,))
+    thread_detect = threading.Thread(target=detect.start, args=(stop_event, args,))
+    thread_mic = threading.Thread(target=mic.record, args=(stop_event, args,))
     thread_detect.start()
     thread_mic.start()
 

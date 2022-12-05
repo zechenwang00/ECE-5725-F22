@@ -12,7 +12,7 @@ fs = 44100
 duration = 1  # seconds
 
 
-def record(stop_event, visualize):
+def record(stop_event, args):
 	# keeps recording audio and then perform FFT
 	while True:
 		if stop_event.is_set():
@@ -51,13 +51,12 @@ def record(stop_event, visualize):
 				break
 
 
-		if visualize:
+		if args.figure:
 			plt.clf()
 			# plt.plot(y1, linestyle = 'dotted', label='original')
 			plt.plot(y1_hp, linestyle = 'dotted', label='highpass')
 			# plt.plot(y2, linestyle = 'dotted')
-			plt.draw()
-			plt.pause(0.001)
+			plt.show()
 
 if __name__ == "__main__":
 	while True:
