@@ -49,6 +49,7 @@ def record(event_dict, args):
 				counter = counter + 1
 			if (counter > 2):
 				print("detected")
+				event_dict['capture'].set()
 				break
 
 

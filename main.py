@@ -18,6 +18,8 @@ parser.add_argument('--vis', dest='visualize',
                     action='store_true')
 parser.add_argument('--fig', dest='figure',
                     action='store_true')
+parser.add_argument('--verbose', dest='verbose',
+                    action='store_true')
 args = parser.parse_args()
 
 
@@ -33,7 +35,8 @@ if __name__ == "__main__":
     # mic.record(visualize=args.visualize)
 
     stop_event = threading.Event()
-    event_dict = {'stop': stop_event}
+    capture_event = threading.Event()
+    event_dict = {'stop': stop_event, 'capture': capture_event}
     thread_detect = threading.Thread(target=detect.start, args=(event_dict, args,))
     thread_mic = threading.Thread(target=mic.record, args=(event_dict, args,))
     thread_detect.start()

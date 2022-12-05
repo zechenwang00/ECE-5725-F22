@@ -78,8 +78,12 @@ def start(event_dict, args):
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         gray = cv2.resize(gray, (640, 360))
         gray = cv2.rotate(gray, cv2.ROTATE_90_COUNTERCLOCKWISE)
-        # if save:
-        #     cv2.imwrite("sound.jpg", gray)
+
+        if event_dict['capture'].is_set():
+            cv2.imwrite("sound.jpg", gray)
+            print('writing image...')
+            event_dict['capture'].clear()
+
         if args.visualize:
             cv2.imshow('frame', gray)
 
@@ -109,9 +113,10 @@ def start(event_dict, args):
                 pi.hardware_PWM(HORI, 50, PWM_BASE_HORI + curr_angle_hori * 1000)
 
                 # print tag info
-                print("Detected tag id[" + str(detections[idx].tag_id), end='] @ ')
-                print('x = '  + str(x) +
-                    ' y = ' + str(y) )
+                if args.verbose:
+                    print("Detected tag id[" + str(detections[idx].tag_id), end='] @ ')
+                    print('x = '  + str(x) +
+                        ' y = ' + str(y) )
 
         if cv2.waitKey(1) == ord('q'):
             pi.hardware_PWM(VERT, 50, 0)
