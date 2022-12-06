@@ -2,6 +2,7 @@ import pygame
 import os, sys
 import time
 import subprocess
+import RPi.GPIO as GPIO
 
 # RPi Configs
 os.putenv('SDL_VIDEODRIaVER', 'fbcon')   # Display on piTFT
@@ -27,6 +28,15 @@ pir_script_start    = "pm2 start " + PIR
 detect_script_stop  = "pm2 stop "  + DETECT
 mic_script_stop     = "pm2 stop "  + MIC
 pir_script_stop     = "pm2 stop "  + PIR
+
+def quit_game(channel):
+    global code_run
+    code_run = False
+
+# GPIO for buttons
+sw_stop = 27
+GPIO.setmode(GPIO.BCM)
+GPIO.add_event_detect(sw_stop, GPIO.FALLING, callback=quit_game, bouncetime=300)
 
 # pygame display configs
 pygame.init()
