@@ -6,7 +6,7 @@ import RPi.GPIO as GPIO
 
 # RPi Configs
 os.putenv('SDL_VIDEODRIaVER', 'fbcon')   # Display on piTFT
-os.putenv('SDL_FBDEV', '/dev/fb0')
+os.putenv('SDL_FBDEV', '/dev/fb1')
 os.putenv('SDL_MOUSEDRV', 'TSLIB')     # Track mouse clicks on piTFT
 os.putenv('SDL_MOUSEDEV', '/dev/input/touchscreen')
 
@@ -155,7 +155,7 @@ while code_run:
                                 subprocess.check_output(pir_script_stop, shell=True)
     else:
         # if in photo viewing mode
-        text_buttons = {'Back': (width / 2, height - 20)}
+        text_buttons = {'Back': (width / 2, height - 30)}
         text_buttons_rect = {}
         # blit text rects
         for my_text, text_pos in text_buttons.items():

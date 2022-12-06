@@ -8,6 +8,9 @@ import matplotlib.pyplot as plt
 import numpy as np
 from scipy.fft import rfft, irfft
 import time
+import datetime
+import requests
+import config
 
 
 # set duration and start recording
@@ -52,6 +55,14 @@ def record(event_dict, args):
 				counter = counter + 1
 			if (counter > 2):
 				print("detected")
+				# send text
+				message = '\U0001F50A loud sound detected'
+				curr_time = datetime.datetime.now().strftime("%H:%M:%S %m/%d/%Y")
+				resp = requests.post('https://textbelt.com/text', {
+					'phone': config.PHONE,
+					'message': message + " at " + curr_time,
+					'key': config.KEY,
+				})
 				event_dict['capture'].set()
 				capture = True
 				with open('capture.tmp', 'wb') as f:
