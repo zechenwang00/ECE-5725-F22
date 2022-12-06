@@ -1,6 +1,7 @@
 import pygame
 import os, sys
 import time
+import subprocess
 
 # RPi Configs
 os.putenv('SDL_VIDEODRIaVER', 'fbcon')   # Display on piTFT
@@ -14,6 +15,18 @@ detect_run = False
 mic_run = False
 pir_run = False
 main_window = True
+
+# Scripts
+DETECT = '0'
+MIC = '1'
+PIR = '2'
+
+detect_script_start = "pm2 start " + DETECT
+mic_script_start    = "pm2 start " + MIC
+pir_script_start    = "pm2 start " + PIR
+detect_script_stop  = "pm2 stop "  + DETECT
+mic_script_stop     = "pm2 stop "  + MIC
+pir_script_stop     = "pm2 stop "  + PIR
 
 # pygame display configs
 pygame.init()
@@ -107,12 +120,25 @@ while code_run:
                             main_window = False
                 for button, rect in img_buttons_rect.items():
                     if rect.collidepoint((x, y)):
+                        # toggles each program
                         if button == 'detect_button':
                             detect_run = not detect_run
+                            if detect_run:
+                                subprocess.check_output(detect_script_start, shell=True)
+                            else:
+                                subprocess.check_output(detect_script_stop, shell=True)
                         elif button == 'mic_button':
                             mic_run = not mic_run
+                            if mic_run:
+                                subprocess.check_output(mic_script_start, shell=True)
+                            else:
+                                subprocess.check_output(mic_script_stop, shell=True)
                         elif button == 'pir_button':
                             pir_run = not pir_run
+                            if pir_run:
+                                subprocess.check_output(pir_script_start, shell=True)
+                            else:
+                                subprocess.check_output(pir_script_stop, shell=True)
     else:
         # if in photo viewing mode
         text_buttons = {'Back': (width / 2, height - 20)}
