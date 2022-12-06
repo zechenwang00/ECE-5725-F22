@@ -36,6 +36,7 @@ def quit_game(channel):
 # GPIO for buttons
 sw_stop = 27
 GPIO.setmode(GPIO.BCM)
+GPIO.setup(sw_stop, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 GPIO.add_event_detect(sw_stop, GPIO.FALLING, callback=quit_game, bouncetime=300)
 
 # pygame display configs
