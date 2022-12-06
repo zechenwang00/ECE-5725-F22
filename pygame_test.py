@@ -2,17 +2,23 @@ import pygame
 import os, sys
 import time
 
+# RPi Configs
+os.putenv('SDL_VIDEODRIaVER', 'fbcon')   # Display on piTFT
+os.putenv('SDL_FBDEV', '/dev/fb0')
+os.putenv('SDL_MOUSEDRV', 'TSLIB')     # Track mouse clicks on piTFT
+os.putenv('SDL_MOUSEDEV', '/dev/input/touchscreen')
+
+# Global Flags
 code_run = True
 detect_run = False
 mic_run = False
 pir_run = False
 main_window = True
 
-
 # pygame display configs
 pygame.init()
 clock = pygame.time.Clock()
-pygame.mouse.set_visible(True) # TODO: set to false
+pygame.mouse.set_visible(False) # TODO: set to false
 WHITE = 255, 255, 255
 BLACK = 0,0,0
 x,y = 0, 0
