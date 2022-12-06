@@ -83,8 +83,8 @@ while code_run:
     if main_window:
         # if in main menu
         # define buttons and rects
-        text_buttons = {'Quit':                 (width * 3 / 4, height - 20),
-                        'View Photo':           (width / 4, height - 20),
+        text_buttons = {'Quit':                 (width * 3 / 4, height - 30),
+                        'View Photo':           (width / 4, height - 30),
                         'tracking & stream':    (width / 2, 20),
                         'sound detection':      (width / 2, 80),
                         'PIR alerts':           (width / 2, 140)}
@@ -127,6 +127,9 @@ while code_run:
                     if rect.collidepoint((x, y)):
                         if my_text == 'Quit':
                             code_run = False
+                            subprocess.check_output(detect_script_stop, shell=True)
+                            subprocess.check_output(mic_script_stop, shell=True)
+                            subprocess.check_output(pir_script_stop, shell=True)
                         elif my_text == 'View Photo':
                             main_window = False
                 for button, rect in img_buttons_rect.items():
